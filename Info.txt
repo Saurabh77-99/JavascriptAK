@@ -1,0 +1,494 @@
+Everything in Javascript happens inside an Execution Context
+Execution Context is like a big-box or container in which js code is executed.
+
+*Memory Component* also called as Variable environment -> in which all these variables, functions are stored as key-value pairs.
+
+*Code Component* also called as Thread of Execution -> like a thread in which whole code is executed one line at a time
+_____________________________________
+| Memory Component |  Code Component |
+_____________________________________
+| Key:value        |       |          |
+| a:10             |       |          |
+| fn:{..}          |       ^          |
+______________________________________
+
+Js is a synchronous single threaded language
+Js can execute one command at a time in a specific order.
+-------------------------------------------------------------------------------------------
+When js code is executed , the Execution Context is created
+Two Component - Memory and Code
+Two phases - Memory creation phase and Code Execution phase
+
+First phase -> Memory Creation -> allocate memory to variables and functions.
+In first phase , Variable are stored with UNDEFINED and functions with WHOLE FN Code
+Undefined is a placeholder , a special keyword in JS.
+
+Second phase -> Code Execution -> 
+When a function is is executed -> a brand new execution context is created, before it was Global Execution Context.
+
+return -> states that return the control of the program , to place where function is invoked
+The whole execution context for instance of that function will be deleted.
+At last after every execution , the whole global execution context will be deleted.
+
+It handles everything to manage this execution context creation,deletion and the control it manages a stack called CALLSTACK.
+it is stack , everytime at the bottom of stack we have Global execution context , after that execution context-1 ,2,3...so on goes on top and pops off.
+
+**CALL-STACK maintains the order of execution of execution contexts.**
+
+Synonyms for callstack:
+CALLSTACK,Execution Context Stack,Program Stack,Control Stack,Runtime Stack,Machine Stack
+------------------------------------------------------------------------------------------
+
+### Hoisting in Js
+- It is a phenomena by which you access Functions and variables even before you have initialized it from anywhere.
+- memory is allocated to each and every variable and function and stores  before even executing the first line of the code. Everything undefined then memory allocation when run.
+- variables are given Undefined while Function has whole function code stored in it.
+
+### Difference between Not defined and undefined
+
+- When in the code i haven't included X variable and is not defined  then also i am using it for code it will generat and error and it will be NOT DEFINED.
+- While in the code i have given x=7 or anything and then before its execution i am printing x , but it will be there in execution context as undefined therefore Undefined.
+
+Arrow function : -> variable in the form of function
+we need to give var,let,const otherwise it would generate error
+var getName = () => {
+    console.log("Hello World");
+}
+
+when declaring function by var , it will behave like variable instead of function.
+therefore undefined.
+-------------------------------------------------------------------------------------------
+## Function invocation and Variable environment in JS
+
+Memory component is called as Variable environment in JS
+
+Local :
+    this.window
+    x:undefined
+------------------------------------------------------------------------------------------
+## Shortest JS program
+
+The empty file is the shortest JS program , tho there is nothing to execute in js, it will still execute , sets global execution context.
+
+Window is an global object created whenever global execution context is created that has many js functions which can be used anywhere. 
+
+Wherever JS is running , it must have JS engine. (V8 engine)
+
+this === window -> True -> at global level in case of browser
+
+Whenever you declare a global variable or function , it get attached to the window object.
+
+window.a = this.a = a -> all are same
+
+-------------------------------------------------------------------------------------------
+### Undefined 
+
+Undefined is a placeholder that is placed in the memory
+
+JS is Loosely typed language-> weakly typed language, it doesn't need any datatype
+
+------------------------------------------------------------------------------------------
+### The Scope Chain and Lexical environment
+
+Global execution context has memory and code section in it , it is put in callstack.
+Whenever an execution context is created, lexical environment is also created.
+Lexical environment is local memory along with lexical environment of parent
+
+Lexical means hierarchy or in a sequence.
+along with memory space,a refernce to lexgical environment of parent.
+
+Scope chain -> is nothing but chain of all this lexical environment and parent references
+-----------------------------------------------------------------------------------------
+## What is temporal deadzone? Let and const declarations hoisted? difference between Syntax error vs Reference error vs Type error?
+
+when let and const are declared the memory is allocated but they are stored in differentr memory space than var which is stored in Global memory space.
+
+You can't access this let and const declaration before initializing any values.
+
+## What is temporal deadzone?
+- So it is the time since when let variable was hoisted and till that variable is assigned a value. The time between them is called Temporal deadzone.
+
+cannot access error -> temporal deadzone
+not defined -> couldn't find variable in the Scope
+
+window is a global object , var where attached to it.
+window.b 
+
+let a -> won't get attached to window object -> like var b -> window.be
+
+Redeclaration of let and const isn't allowed it will throw error.-> Syntax error
+JS won't run a single line of code if it sees duplication of any let,var and const in same scope again.
+
+var b = 100
+var b = 1000 -> this can be done
+
+## CONST
+const behaves same like let in hoisting and its strict.
+
+let a;
+a = 10
+console.log(a); 
+you can initialized this later in program anywhere.
+
+You can't do same in case of const, you have to initialized first.
+Otherwise error "Missing initializer error in const declaration"
+
+# Differences between Syntax error , Reference error and Type error
+
+const b = 1100;
+b = 100;
+- It will lead to TypeError
+
+Duplication of Redeclaration - > Syntax error
+
+trying to access "a" before initializing it - > Reference error
+
+use CONST whenever possible , if not const , use LET to avoid unexpected error.
+
+## How to avoid Temporal deadzone
+
+try to declare and initialize variables and value at the top of the program otherwise it would lead to unexpected error.
+We are shrinking the time of temporal deadzone
+
+Let and const are Hoisted.
+-------------------------------------------------------------------------------------------
+### Block Scope and Shadowing in JS
+
+let and const are 'Block scoped'
+
+A block is defined by this curlu braces {}
+- It does nothing , why do we use it ?
+It is called Compound Statement
+Block is combining multiple lines of js code in one group.
+
+We group Multiple statements in a block, so that we can use it where js expects one statement.
+
+if(true) console.log("Hey");
+
+## Illegal Shadowing in JS
+
+let a = 20
+{
+    var a = 20
+}
+-- You cannot shadow let by using var
+
+let a = 20
+{
+    let a = 20
+}
+-- You can shadow let by using let
+
+## Var is a function scoped.
+
+let a = 20;
+function x(){
+    var a = 20;
+}
+-- This is valid
+
+same is the case with const.
+
+Block Scope also follows lexical scope
+------------------------------------------------------------------------------------------
+Closures
+
+- A function bind together with its lexical environment
+
+Uses of closure:
+- Module Design Pattern
+- Currying
+- functions like once
+- memoize
+- maintaining state in async World
+- setTimouts
+- Iterators
+- and many more..
+
+-------------------------------------------------------------------------------------------
+setTimeouts
+
+function x(){
+    var i = 1;
+    setTimeout(function() {
+        console.log(i);
+    },1000)
+    console.log("Hey");
+}
+x();
+
+js doesn't waits for anyone , it prints Hey then prints 1 number.
+-----------------------------------------------------------------------------------------
+Interview js :
+
+## Disadvantages of Closures:
+It consumes a lot of memory , because the variables are not garbage collected as program expires.If not handled properly, memory gets leaks.
+
+# Garbage collector:
+It is a program in the browser or js engine, which kinds of free's up the unutilized memory
+Wherever you create a function.
+
+Relation between closures and garbage collector:
+
+
+-------------------------------------------------------------------------------------------
+## What is anonymous function? First class functions
+# Function Statement vs function Expression vs function declaration
+
+# Difference between Function statement and function Expression
+
+- The difference is hoisting
+- while it is run , the function statement runs but function expression gives error.It behaves like variable.
+
+Function declaration -> function statement ->  both are same
+
+A function without a name is called anonymous function.
+anonymous functions are used when functions are used as value.
+
+## Difference between parameter and arguements
+
+### First class functions :
+- the ability to use functions as values is known as first class functions.
+- functions are first-class citizens.
+- if you use let, const instead of var
+
+## Arrow functions
+
+------------------------------------------------------------------------------------------
+## Callbacks
+It gives power of asynchronity.
+JS is a synchronous and single threaded language.
+
+setTimeout takes callback as a parameter.
+
+Everything you execute in program is executed by CallStack only.
+
+## Event Listener
+Free up the Event-listeners
+Event listeners are heavy,when we are not using it as it takes memory. 
+-------------------------------------------------------------------------------------------
+## Event Loop
+
+Js is synchronous single threaded language
+It has a Call stack and can execute only one thing at a time.
+
+Call stack is present inside Js engine..all js code is executed in Callstack.
+Whenever js is run, Global execution context is created and it is put into callstack.
+
+call stack inside JS engine and JS engine is inside Browser.
+Browser has local storage , you can have timer inside browser.
+https:// -> connection to server -> and display it on UI.
+Bluetooth, GeoLocation access
+
+## WEB API's
+-> THESE ARE NOT PART OF JS but these are parts of a BROWSER.
+-> Window is a global object.
+-> window.setTimeout , window.location
+setTimeout 
+DOM APIs 
+fetch()
+local-storage
+console
+location
+
+Event loops function is to constantly monitor callback queue and callstack.
+
+MicroTask queue:
+
+all the callback functions coming from promises , goes into MicroTask queue.
+
+MUTATION OBSERVER -> keeps on checking whether there is MUTATION in dom tree or not.
+if there is change in dom tree , it can execute some callback fn.
+
+CALLBACK QUEUES -> TASK QUEUE
+
+in MicroTask queue - there are many m1,m2,m3... then callback queue will never get chance to execute... therefore it will lead to starvation of call back queue.
+
+------------------------------------------------------------------------------------------
+## JS engine
+
+JS can run anywhere , inside browser,server,smart-watch,bulb,robots.
+Js Runtime environment is like a big container, which has all things that are required to run js code.
+
+Every Browser has JS runtime environment.
+JS Runtime environment is not possible without js engine.
+- JS engine - heart of js runtime environment
+- APIs
+- Event Loop
+- Call back queue
+- MicroTask queue
+
+Nodejs can run code outside the browser.
+
+There are many JS engines of their respective browsers.
+Microsoft edge = Chakra JS engine.
+Chrome =  V8 engine -> written in c++
+Firefox = SpiderMonkey engine - by creator of js
+
+JS engine is not a machine , it is a type of a program.
+
+## JS ENGINE Architecture.
+
+Takes code as input :
+(i) PARSING - code is broken down into "Tokens"
+    Syntax Parser - AST - Abstract Syntax tree
+    AST is generated and passed to compilation state.
+
+astexplorer.net -- website for better understanding
+
+(ii) COMPILATION - 
+    JUST IN TIME Compilation - JIT compilation
+
+    Interpreter - takes code and executes code line by line -> more speed
+    compiler - whole code gets compiled and new code is generated and then its executed.
+    - more efficiency
+
+    JS is Interpretted language as well as compiled language depends on JS engine.
+
+    Js engine can use Interpreter + compiler.
+
+AST goes to interpreter - converts to byte code - compiler - optimizes code on runtime
+
+AOT - Ahead of Time compilation - compiler takes the code that is to be executed later and tries to optime it and produces bytecode which goes to execution.
+
+(iii) EXECUTION
+- Its not possible without Memory Heap and the Callstack.
+ 
+- Garbage Collector tries to free's up the memory space.
+- Mark and Sweep algorithm
+- Inlining
+- Copy elision
+- Inline caching 
+ 
+V8 has a interpreter named "Ignition"
+"TurboFan" as an optimizing compiler
+Garbage Collector - Orinoco (Mark and Sweep Algorithm)
+
+JS source code -> Parser -> Abstract Syntax Tree -> Interpreter Ignition->TurboFan compiler
+                                                          |                    |
+                                                    Bytecode       <-  Optimized M/c Code
+
+------------------------------------------------------------------------------------------
+
+## Trust Issues with setTimeout
+
+A setTimeout with 5 seconds , doesn't take 5 seconds every time.It depends on CallStack.
+
+start - > GEC is created -> call stack
+callback is registered in web API environment and timer of 5 seconds start.
+End 
+after end we have millions of lines of code, -> takes 10 seconds to execute million of line of code in this case GEC still runs and Timer of 5 seconds has exaggrated. 
+Event loop checks whether the call stack is empty or not , therefore after 10 seconds everything gets executed. GEC goes out and Callback from callback queue goes into callstack queue.
+
+Start 
+end
+callback
+
+Concurrency Model makes js a powerful language.
+JS has only one Call stack as it synchronous and single threaded language.
+------------------------------------------------------------------------------------------
+## Higher Order Functions?
+
+A function which takes another function as arguement or returns a function from it is called HOF.
+
+Intro to Functional programming
+
+DRY principle - Don't Repeat Yourself
+Optimize your code - abstract your code
+
+Reusability
+Modularity
+
+Map is a common HOF.
+------------------------------------------------------------------------------------------
+Map , filter , reduce
+
+Map function is used to transform an array.
+Filter function is used to filter an array.
+------------------------------------------------------------------------------------------
+
+## CALLBACK Hell
+callbacks are important so that it can handle asynchronous programming
+async exists, due to callbacks exists.
+
+callback hell type of code can't be managed easily.
+
+Structure is called Pyramid of doom.
+
+(2) Inversion of Control
+we lose control of code during callback hell.
+Invert of control of program
+-----------------------------------------------------------------------------------------
+## promises 
+A promise is an object representing the eventual completion or failure of async operation
+
+Promise object is a placeholder which will be filled later with a value.
+A container for future value.
+It is used to handle asynchronous.
+Promises gives control of the program to us and it will callback only once
+
+## Fetch 
+it is a async operation.
+Fetch is a function "api" given by browser to us. 
+use this fetch function to create api call to github servers.
+Fetch returns us a promise object.
+
+Proto Type
+Promise State 
+Promise Result
+
+State of promise -> 
+Result -> data that fetch will return will be stored in result.
+
+PROMISE comes with a feature of promise chaining.
+
+You can resolve promises only once. It is immutable.
+-> Promise state
+-> Promise result
+
+Whenever there is a promise inside that promise chain,you might have to return that promise chain. otherwise you might lose some data.
+-----------------------------------------------------------------------------------------
+## Creating Promise
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
